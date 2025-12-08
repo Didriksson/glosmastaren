@@ -2,7 +2,7 @@
 import { ref, computed, nextTick } from "vue";
 import { useGlossaryStore } from "../stores/glossaryStore";
 import confetti from "canvas-confetti";
-import type { Word } from "@/stores/types";
+import type { Word } from "../stores/types"; // ✅ Alltid säkert
 
 // Events
 defineEmits(["back-to-input"]);
