@@ -87,7 +87,6 @@ const startRound = () => {
 };
 
 const checkAnswer = async () => {
-    // FIX: Spara ner i lokal variabel så TS förstår att den inte är undefined
     const word = currentWord.value;
 
     if (!word || !userAnswer.value || isChecking.value) return;
@@ -108,7 +107,6 @@ const checkAnswer = async () => {
         feedbackType.value = "error";
         animClass.value = "shake-horizontal";
 
-        // Nu använder vi 'word' istället för 'currentWord.value'
         if (!wrongAnswers.value.find((w) => w.id === word.id)) {
             wrongAnswers.value.push(word);
         }
