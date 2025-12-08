@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from "vue";
 import { useGlossaryStore } from "../stores/glossaryStore";
-import confetti from "canvas-confetti";
+// import confetti from "canvas-confetti";
 import type { Word } from "../stores/types"; // ✅ Alltid säkert
 
 // Events
@@ -148,6 +148,6 @@ const resetQuiz = () => {
 };
 
 const runConfetti = () => {
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    // confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
 };
 </script>
