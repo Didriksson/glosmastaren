@@ -370,13 +370,14 @@ const checkAnswer = async () => {
 
     const correct = targetAnswer.value.toLowerCase(); // Använd vår computed target
     const answer = userAnswer.value.toLowerCase().trim();
-
+    var timeout;
     if (answer === correct) {
         score.value++;
         feedback.value = "Rätt! 🎉";
         feedbackType.value = "success";
         animClass.value = "pop-border";
         runConfetti();
+        timeout = 2000;
     } else {
         feedback.value = `Fel! Rätt svar: ${targetAnswer.value}`;
         feedbackType.value = "error";
@@ -385,11 +386,12 @@ const checkAnswer = async () => {
         if (!wrongAnswers.value.find((w) => w.id === word.id)) {
             wrongAnswers.value.push(currentWord.value);
         }
+        timeout = 5000;
     }
 
     setTimeout(() => {
         nextQuestion();
-    }, 2000);
+    }, 5000);
 };
 
 const nextQuestion = () => {
