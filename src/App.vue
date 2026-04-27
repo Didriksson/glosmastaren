@@ -8,7 +8,7 @@
             <div class="max-w-3xl mx-auto px-4 sm:px-6">
                 <div class="flex justify-between h-16 items-center">
                     <div
-                        class="flex items-center gap-3 cursor-pointer group"
+                        class="flex items-center gap-3 cursor-pointer group select-none"
                         @click="currentView = 'input'"
                     >
                         <div
@@ -23,7 +23,7 @@
                         </h1>
                     </div>
 
-                    <div class="flex space-x-1 bg-slate-100 p-1 rounded-xl">
+                    <div class="flex space-x-1 bg-slate-100 p-1 rounded-xl select-none">
                         <button
                             @click="currentView = 'input'"
                             class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200"

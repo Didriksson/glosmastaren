@@ -150,16 +150,23 @@
                 </button>
 
                 <transition name="fade">
-                    <div
-                        v-if="feedback"
-                        class="mt-6 p-4 rounded-xl font-bold text-lg animate-fade-in-up"
-                        :class="
-                            feedbackType === 'success'
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-red-100 text-red-700'
-                        "
-                    >
-                        {{ feedback }}
+                    <div v-if="feedback" class="mt-6 animate-fade-in-up">
+                        <div
+                            class="p-4 rounded-xl font-bold text-lg"
+                            :class="
+                                feedbackType === 'success'
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-red-100 text-red-700'
+                            "
+                        >
+                            {{ feedback }}
+                        </div>
+                        <p
+                            class="text-center text-xs mt-2 font-medium transition-colors duration-300"
+                            :class="canAdvanceEarly ? 'text-slate-400' : 'text-slate-200'"
+                        >
+                            Tryck Enter för att fortsätta
+                        </p>
                     </div>
                 </transition>
             </div>
@@ -271,7 +278,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
 import { useGlossaryStore } from "../stores/glossaryStore";
 import confetti from "canvas-confetti";
 import type { Word } from "../stores/types"; // ✅ Alltid säkert
@@ -292,6 +299,9 @@ const score = ref(0);
 const feedback = ref("");
 const feedbackType = ref<"success" | "error" | "">("");
 const isChecking = ref(false);
+const waitingForNext = ref(false);
+const canAdvanceEarly = ref(false);
+const nextQuestionTimer = ref<ReturnType<typeof setTimeout> | null>(null);
 const answerInput = ref<HTMLInputElement | null>(null);
 
 // Nya state-variabler
@@ -368,16 +378,16 @@ const checkAnswer = async () => {
 
     isChecking.value = true;
 
-    const correct = targetAnswer.value.toLowerCase(); // Använd vår computed target
+    const correct = targetAnswer.value.toLowerCase();
     const answer = userAnswer.value.toLowerCase().trim();
-    var timeout;
+    let timeout: number;
     if (answer === correct) {
         score.value++;
         feedback.value = "Rätt! 🎉";
         feedbackType.value = "success";
         animClass.value = "pop-border";
         runConfetti();
-        timeout = 2000;
+        timeout = 3000;
     } else {
         feedback.value = `Fel! Rätt svar: ${targetAnswer.value}`;
         feedbackType.value = "error";
@@ -389,10 +399,41 @@ const checkAnswer = async () => {
         timeout = 5000;
     }
 
-    setTimeout(() => {
+    waitingForNext.value = true;
+    if (answer === correct) {
+        canAdvanceEarly.value = true;
+    } else {
+        setTimeout(() => {
+            canAdvanceEarly.value = true;
+        }, 2500);
+    }
+    nextQuestionTimer.value = setTimeout(() => {
         nextQuestion();
-    }, 5000);
+    }, timeout);
 };
+
+const advanceNow = () => {
+    if (!waitingForNext.value) return;
+    if (nextQuestionTimer.value) {
+        clearTimeout(nextQuestionTimer.value);
+        nextQuestionTimer.value = null;
+    }
+    nextQuestion();
+};
+
+const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && waitingForNext.value && canAdvanceEarly.value) {
+        advanceNow();
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("keydown", handleKeydown);
+});
+
+onUnmounted(() => {
+    document.removeEventListener("keydown", handleKeydown);
+});
 
 const nextQuestion = () => {
     if (currentIndex.value < quizQueue.value.length - 1) {
@@ -411,7 +452,10 @@ const resetField = () => {
     feedbackType.value = "";
     animClass.value = "";
     isChecking.value = false;
-    hintShown.value = false; // Göm ledtråd för nytt ord
+    waitingForNext.value = false;
+    canAdvanceEarly.value = false;
+    nextQuestionTimer.value = null;
+    hintShown.value = false;
     nextTick(() => {
         answerInput.value?.focus();
     });
