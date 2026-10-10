@@ -78,6 +78,10 @@ export const useGlossaryStore = defineStore("glossary", () => {
     words.value = words.value.filter((w) => w.id !== id);
   };
 
+  const clearWords = () => {
+    words.value = [];
+  };
+
   const swapWordLanguages = (id: string) => {
     const word = words.value.find((w) => w.id === id);
     if (word) {
@@ -96,6 +100,7 @@ export const useGlossaryStore = defineStore("glossary", () => {
     foreignLang,
     addWord,
     removeWord,
+    clearWords,
     swapWordLanguages,
   };
 });

@@ -152,11 +152,20 @@
                 class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4"
             >
                 <h3 class="text-xl font-bold text-slate-700">Dina glosor</h3>
-                <span
-                    class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold"
-                >
-                    {{ store.count }} st
-                </span>
+                <div class="flex items-center gap-2">
+                    <span
+                        class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold"
+                    >
+                        {{ store.count }} st
+                    </span>
+                    <button
+                        v-if="store.count > 0"
+                        @click="confirmClear"
+                        class="text-xs font-bold text-slate-400 hover:text-red-500 hover:bg-red-50 px-3 py-1 rounded-full border border-slate-200 hover:border-red-200 transition-colors"
+                    >
+                        Rensa alla
+                    </button>
+                </div>
             </div>
 
             <div v-if="store.count > 0">
@@ -267,5 +276,11 @@ const swapInputs = () => {
     const temp = nativeInput.value;
     nativeInput.value = foreignInput.value;
     foreignInput.value = temp;
+};
+
+const confirmClear = () => {
+    if (confirm(`Är du säker? Alla ${store.count} glosor tas bort.`)) {
+        store.clearWords();
+    }
 };
 </script>
