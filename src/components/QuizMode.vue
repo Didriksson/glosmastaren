@@ -33,7 +33,7 @@
                                 : 'border-slate-200 text-slate-500 hover:border-indigo-200'
                         "
                     >
-                        🇸🇪 Sv ➔ 🇬🇧 En
+                        {{ store.nativeLang.name }} ➔ {{ store.foreignLang.name }}
                     </button>
                     <button
                         @click="quizDirection = 'en-sv'"
@@ -44,7 +44,7 @@
                                 : 'border-slate-200 text-slate-500 hover:border-purple-200'
                         "
                     >
-                        🇬🇧 En ➔ 🇸🇪 Sv
+                        {{ store.foreignLang.name }} ➔ {{ store.nativeLang.name }}
                     </button>
                 </div>
             </div>
@@ -92,8 +92,8 @@
                 >
                     {{
                         quizDirection === "sv-en"
-                            ? "Översätt till engelska"
-                            : "Översätt till svenska"
+                            ? `Översätt till ${store.foreignLang.name}`
+                            : `Översätt till ${store.nativeLang.name}`
                     }}
                 </span>
 
@@ -179,7 +179,7 @@
         </div>
 
         <div
-            v-else-if="isFinished"
+            v-else-if="isFinished && !showReward"
             class="bg-white p-10 rounded-3xl shadow-2xl border border-slate-100 text-center max-w-md w-full animate-fade-in-up"
         >
             <div class="text-6xl mb-4 animate-bounce">
@@ -275,6 +275,12 @@
             </div>
         </div>
     </div>
+
+    <RewardMiniGame
+        v-if="showReward"
+        :words="quizQueue"
+        @done="showReward = false"
+    />
 </template>
 
 <script setup lang="ts">
@@ -282,6 +288,7 @@ import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
 import { useGlossaryStore } from "../stores/glossaryStore";
 import confetti from "canvas-confetti";
 import type { Word } from "../stores/types"; // ✅ Alltid säkert
+import RewardMiniGame from "./RewardMiniGame.vue";
 
 // Events
 defineEmits(["back-to-input"]);
@@ -310,6 +317,7 @@ const hintShown = ref(false);
 
 // Animation state
 const animClass = ref("");
+const showReward = ref(false);
 
 const currentWord = computed(() => quizQueue.value[currentIndex.value]);
 
@@ -442,7 +450,11 @@ const nextQuestion = () => {
     } else {
         isActive.value = false;
         isFinished.value = true;
-        if (score.value === quizQueue.value.length) runConfetti();
+        if (score.value === quizQueue.value.length) {
+            showReward.value = true;
+        } else {
+            runConfetti();
+        }
     }
 };
 

@@ -1,22 +1,87 @@
 <!doctype html>
-<html lang="">
+<html lang="sv">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>GlosMästaren</title>
-    </head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LJSLWQZQ40"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-LJSLWQZQ40');
-</script>
+        <!-- Primary SEO -->
+        <title>GlosMästaren – Gratis glosträning för skolan</title>
+        <meta name="description" content="Träna glosor gratis direkt i webbläsaren. Lägg in dina egna ord och öva med förhör, studieläge och para-ihop-spel. Inget konto behövs – perfekt inför provet." />
+        <meta name="keywords" content="glosträning, glosförhör, träna glosor, glosor online, gratis glosträning, skolans glosor, glosövning" />
+        <link rel="canonical" href="https://glosmästaren.se/" />
+
+        <!-- Open Graph (Facebook, Discord, iMessage m.m.) -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://glosmästaren.se/" />
+        <meta property="og:title" content="GlosMästaren – Gratis glosträning för skolan" />
+        <meta property="og:description" content="Lägg in dina glosor och öva med förhör, studieläge och para-ihop-spel. Gratis, utan konto, direkt i webbläsaren." />
+        <meta property="og:locale" content="sv_SE" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="GlosMästaren – Gratis glosträning för skolan" />
+        <meta name="twitter:description" content="Lägg in dina glosor och öva med förhör, studieläge och para-ihop-spel. Gratis, utan konto." />
+
+        <!-- Structured data – hjälper Google förstå appen -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "GlosMästaren",
+          "url": "https://glosmästaren.se/",
+          "description": "Gratis glosträning för skolan. Lägg in dina egna glosor och öva med förhör, studieläge och para-ihop-spel.",
+          "applicationCategory": "EducationApplication",
+          "operatingSystem": "Web",
+          "inLanguage": "sv",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "SEK"
+          }
+        }
+        </script>
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LJSLWQZQ40"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-LJSLWQZQ40');
+        </script>
+    </head>
     <body>
         <div id="app"></div>
+        <noscript>GlosMästaren är ett gratis verktyg för glosträning. Aktivera JavaScript för att använda appen.</noscript>
         <script type="module" src="/src/main.ts"></script>
+
+        <!-- Static content for search engines — visually separated from the app -->
+        <footer class="max-w-2xl mx-auto px-6 py-16 text-slate-400 text-sm">
+            <div class="border-t border-slate-100 pt-12">
+                <h2 class="text-lg font-bold text-slate-600 mb-2">Gratis glosträning för skolan</h2>
+                <p class="mb-6 leading-relaxed">
+                    Lägg in dina egna glosor och öva direkt i webbläsaren — inget konto, inga annonser, helt gratis.
+                    Passar alla åldrar och fungerar för alla språk: engelska, tyska, franska, spanska och mer.
+                </p>
+                <ul class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                    <li class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="font-bold text-slate-600 mb-1">🚀 Glosförhör</div>
+                        <p>Testa dina kunskaper med flervalsförhör. Poängräkning och konfetti när du klarar det.</p>
+                    </li>
+                    <li class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="font-bold text-slate-600 mb-1">📖 Studieläge</div>
+                        <p>Se ordet och fyll i bokstäverna — nöta in glosorna inför provet utan stress.</p>
+                    </li>
+                    <li class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <div class="font-bold text-slate-600 mb-1">🔗 Para ihop</div>
+                        <p>Dra ihop ord med deras översättning. Rätta par kopplas med en grön linje.</p>
+                    </li>
+                </ul>
+                <p class="text-xs text-slate-300">© GlosMästaren – glosmästaren.se</p>
+            </div>
+        </footer>
     </body>
 </html>

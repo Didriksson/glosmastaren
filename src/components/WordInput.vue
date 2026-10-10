@@ -3,7 +3,7 @@
         <div
             class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-100"
         >
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <h2 class="text-3xl font-extrabold text-slate-800 mb-2">
                     Lägg till glosor
                 </h2>
@@ -12,17 +12,87 @@
                 </p>
             </div>
 
+            <!-- Language selectors -->
+            <div class="flex gap-2 items-center mb-6 bg-slate-50 rounded-xl p-3 border border-slate-100">
+
+                <!-- Native language picker -->
+                <div class="relative flex-1">
+                    <button
+                        type="button"
+                        @click="openPicker = openPicker === 'native' ? null : 'native'"
+                        class="w-full flex items-center justify-between gap-1 text-sm font-bold text-slate-700 bg-white border-2 border-slate-200 rounded-lg px-3 py-2 hover:border-indigo-300 transition-colors"
+                        :class="openPicker === 'native' ? 'border-indigo-400' : ''"
+                    >
+                        <span class="flex items-center gap-1.5"><img :src="flagUrl(store.nativeLang.cc)" :alt="store.nativeLang.name" class="w-5 h-auto rounded-sm" />{{ store.nativeLang.code }}</span>
+                        <span class="text-slate-400 text-xs leading-none">▾</span>
+                    </button>
+                    <div
+                        v-if="openPicker === 'native'"
+                        class="absolute top-full left-0 mt-1 z-20 bg-white border border-slate-200 rounded-xl shadow-xl overflow-y-auto max-h-48 w-full min-w-[110px]"
+                    >
+                        <button
+                            v-for="lang in LANGUAGES"
+                            :key="lang.id"
+                            type="button"
+                            @click="store.nativeLangId = lang.id; openPicker = null"
+                            class="w-full text-left px-3 py-2 text-sm font-bold transition-colors"
+                            :class="store.nativeLangId === lang.id ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50'"
+                        >
+                            <span class="flex items-center gap-1.5"><img :src="flagUrl(lang.cc)" :alt="lang.name" class="w-5 h-auto rounded-sm" />{{ lang.code }}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <span class="text-slate-300 text-base">↔</span>
+
+                <!-- Foreign language picker -->
+                <div class="relative flex-1">
+                    <button
+                        type="button"
+                        @click="openPicker = openPicker === 'foreign' ? null : 'foreign'"
+                        class="w-full flex items-center justify-between gap-1 text-sm font-bold text-slate-700 bg-white border-2 border-slate-200 rounded-lg px-3 py-2 hover:border-purple-300 transition-colors"
+                        :class="openPicker === 'foreign' ? 'border-purple-400' : ''"
+                    >
+                        <span class="flex items-center gap-1.5"><img :src="flagUrl(store.foreignLang.cc)" :alt="store.foreignLang.name" class="w-5 h-auto rounded-sm" />{{ store.foreignLang.code }}</span>
+                        <span class="text-slate-400 text-xs leading-none">▾</span>
+                    </button>
+                    <div
+                        v-if="openPicker === 'foreign'"
+                        class="absolute top-full left-0 mt-1 z-20 bg-white border border-slate-200 rounded-xl shadow-xl overflow-y-auto max-h-48 w-full min-w-[110px]"
+                    >
+                        <button
+                            v-for="lang in LANGUAGES"
+                            :key="lang.id"
+                            type="button"
+                            @click="store.foreignLangId = lang.id; openPicker = null"
+                            class="w-full text-left px-3 py-2 text-sm font-bold transition-colors"
+                            :class="store.foreignLangId === lang.id ? 'bg-purple-50 text-purple-700' : 'text-slate-600 hover:bg-slate-50'"
+                        >
+                            <span class="flex items-center gap-1.5"><img :src="flagUrl(lang.cc)" :alt="lang.name" class="w-5 h-auto rounded-sm" />{{ lang.code }}</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Transparent backdrop to close pickers -->
+            <div
+                v-if="openPicker"
+                class="fixed inset-0 z-10"
+                @click="openPicker = null"
+            />
+
             <form @submit.prevent="handleSubmit" class="flex flex-col gap-4">
                 <div class="flex flex-col sm:flex-row gap-2 items-center">
                     <div class="w-full space-y-1 relative">
                         <label
                             class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
-                            >Svenska</label
+                            >{{ store.nativeLang.name }}</label
                         >
                         <input
                             v-model="nativeInput"
                             type="text"
-                            placeholder="t.ex. Katt"
+                            :placeholder="`t.ex. Katt`"
                             required
                             ref="firstInput"
                             class="w-full p-4 bg-slate-50 text-lg border-2 border-slate-100 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 transition-all placeholder:text-slate-300"
@@ -54,12 +124,12 @@
                     <div class="w-full space-y-1">
                         <label
                             class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
-                            >Engelska</label
+                            >{{ store.foreignLang.name }}</label
                         >
                         <input
                             v-model="foreignInput"
                             type="text"
-                            placeholder="t.ex. Cat"
+                            :placeholder="`t.ex. Cat`"
                             required
                             class="w-full p-4 bg-slate-50 text-lg border-2 border-slate-100 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-50 transition-all placeholder:text-slate-300"
                         />
@@ -172,11 +242,12 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from "vue";
-import { useGlossaryStore } from "../stores/glossaryStore";
+import { useGlossaryStore, LANGUAGES, flagUrl } from "../stores/glossaryStore";
 
 defineEmits(["start-quiz"]);
 
 const store = useGlossaryStore();
+const openPicker = ref<"native" | "foreign" | null>(null);
 const nativeInput = ref("");
 const foreignInput = ref("");
 const firstInput = ref<HTMLInputElement | null>(null);

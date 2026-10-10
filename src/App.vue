@@ -26,7 +26,7 @@
                     <div class="flex space-x-1 bg-slate-100 p-1 rounded-xl select-none">
                         <button
                             @click="currentView = 'input'"
-                            class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200"
                             :class="
                                 currentView === 'input'
                                     ? 'bg-white text-indigo-600 shadow-sm'
@@ -38,8 +38,34 @@
                         </button>
 
                         <button
+                            @click="currentView = 'study'"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200"
+                            :class="
+                                currentView === 'study'
+                                    ? 'bg-white text-indigo-600 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200'
+                            "
+                        >
+                            <span>📖</span>
+                            <span class="hidden sm:inline">Studera</span>
+                        </button>
+
+                        <button
+                            @click="currentView = 'match'"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200"
+                            :class="
+                                currentView === 'match'
+                                    ? 'bg-white text-indigo-600 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200'
+                            "
+                        >
+                            <span>🔗</span>
+                            <span class="hidden sm:inline">Para ihop</span>
+                        </button>
+
+                        <button
                             @click="currentView = 'quiz'"
-                            class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200"
                             :class="
                                 currentView === 'quiz'
                                     ? 'bg-white text-indigo-600 shadow-sm'
@@ -65,6 +91,14 @@
                         v-if="currentView === 'quiz'"
                         @back-to-input="currentView = 'input'"
                     />
+                    <StudyMode
+                        v-if="currentView === 'study'"
+                        @back-to-input="currentView = 'input'"
+                    />
+                    <MatchMode
+                        v-if="currentView === 'match'"
+                        @back-to-input="currentView = 'input'"
+                    />
                 </div>
             </transition>
         </main>
@@ -81,8 +115,10 @@
 import { ref } from "vue";
 import WordInput from "./components/WordInput.vue";
 import QuizMode from "./components/QuizMode.vue";
+import StudyMode from "./components/StudyMode.vue";
+import MatchMode from "./components/MatchMode.vue";
 
-type ViewState = "input" | "quiz";
+type ViewState = "input" | "quiz" | "study" | "match";
 const currentView = ref<ViewState>("input");
 </script>
 
